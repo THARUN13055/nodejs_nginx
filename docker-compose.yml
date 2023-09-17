@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  nodejs-app:
+    image: tharun13055/nginxjs:latest
+    container_name: nodejs-app
+    ports:
+      - "3030:3030"
+    networks:
+      - mynetwork
+
+  nginx-container:
+    image: nginx:latest
+    container_name: nginx-container
+    ports:
+      - "80:80"
+    networks:
+      - mynetwork
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - nodejs-app
+
+networks:
+  mynetwork:
