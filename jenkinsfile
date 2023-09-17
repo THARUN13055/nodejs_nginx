@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    stages{
+        stage('git checkout'){
+            steps{
+                git branch: 'test', url: 'https://github.com/THARUN13055/nodejs_nginx.git'
+            }
+        }
+        stage('docker'){
+            steps{
+                 withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'password', usernameVariable: 'tharun13055')]) {
+                    sh "docker login -u tharun13055 -p ${password}"
+                    sh "docker build -t tharun13055/nginxjs:v${env.BUILD_NUMBER} ."
+                    sh "docker build -t tharun13055/nginxjs:latest ."
+                    sh "docker push tharun13055/nginxjs:v${env.BUILD_NUMBER}"
+                    sh "docker push tharun13055/nginxjs:latest"
+                }
+            }
+        }
+        stage('docker-compose'){
+            steps{
+                sh "docker-compose up -d"
+            }
+        }   
+
+    }
+}

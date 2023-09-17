@@ -1,0 +1,5 @@
+**/.git
+**/Dockerfile
+**/docekr-compose.yml
+**/readme.md
+**/jenkinsfile
